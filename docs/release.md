@@ -19,8 +19,23 @@ Steps to release a new version:
 1. Ensure Watson NLU service API tests are enabled and passing by setting 
    IBM_API_KEY and IBM_SERVICE_URL, then running unit tests with pytest.
 
+1. Make sure that the package installs and imports on a Python environment with 
+   only the packages in `requirements.txt` by running the following commands 
+   from the root of your local copy of the repository:
+   ```
+   conda create -y --prefix ./testenv python=3.8 pip
+   conda activate ./testenv
+   pip install -r requirements.txt
+   pip install --editable .
+   python -c "import text_extensions_for_pandas as tp"
+   ```
+   The last command should succeed with no exceptions.
+   
+   You can safely deactivate and remove the Anaconda environment`./testenv` 
+   once this step is done.
+
 1. Activate your Text Extensions for Pandas build environment (usually called 
-   `pd`)
+   `pd`).
 
 1. Ensure that all the notebooks under the `notebooks` directory run and
    produce substantially the same output as before. This step only needs to be
@@ -38,7 +53,8 @@ Steps to release a new version:
 1. Create and merge a pull request against master that increments the version 
    number.
 
-1. Remove the `dist` directory if present and run 
+1. Make sure that your build environment (usually `pd`) is still active.
+   Remove the `dist` directory if present and run 
    ```
    python setup.py sdist bdist_wheel
    ```
@@ -62,8 +78,8 @@ Steps to release a new version:
    pip install dist/text_extensions_for_pandas*.whl
    ```
    
-1. Activate your new environment, start up JupyterLab, and verify that the 
-   notebooks under `notebooks` still run.
+1. Navigate to the `notebooks` directory, ctivate your new environment, start up 
+   JupyterLab, and verify that the notebooks under `notebooks` still run.
 
 1. (optional): Do a test upload to TestPyPI by running:
    ```
